@@ -42,7 +42,7 @@ def convert(json_file, include, ignore):
     
     return parse_descriptors(data, include, ignore)
 
-def convert_all(json_files, csv_file, include=True, ignore=None, add_filename=True):
+def convert_all(json_files, csv_file, include=None, ignore=None, add_filename=True):
 
     with open(csv_file, 'wb') as f_csv:
         print "Writing to", csv_file
