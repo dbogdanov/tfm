@@ -46,11 +46,10 @@ def process_all(input_dir, results_dir, include, ignore):
 
     ks = []
     for feature in data.keys():
-        # Overall distribution plots
+        # Overall distribution plots (all categories)
         try:
             for category in data[feature].keys():
-                #print feature, category, type(data[feature][category]), len(data[feature][category])
-                seaborn.distplot(data[feature][category])
+                seaborn.distplot(data[feature][category], kde_kws={"label": category})
             plt.savefig(os.path.join(results_dir, feature + '.png'))
             plt.clf()
 
@@ -61,8 +60,8 @@ def process_all(input_dir, results_dir, include, ignore):
         pairs = list(itertools.combinations(data[feature].keys(), 2))
         for g1, g2 in pairs:
             try:
-                seaborn.distplot(data[feature][g1])
-                seaborn.distplot(data[feature][g2])
+                seaborn.distplot(data[feature][g1], kde_kws={"label": g1})
+                seaborn.distplot(data[feature][g2], kde_kws={"label": g2})
                 plt.savefig(os.path.join(results_dir, feature + '-' + g1 + '-' + g2 + '.png'))
                 plt.clf()
             except:
@@ -87,7 +86,7 @@ def process_all(input_dir, results_dir, include, ignore):
 
 if __name__ == '__main__':
     parser = ArgumentParser(description = """
-Provides statistics for low-level features distribution per class in a dataset. 
+Provides statistics for low-level features distribution per class in a dataset.
 """)
     parser.add_argument('-i', '--input_dir', help='Input directory with descriptor json files', required=True)
     parser.add_argument('-o', '--results_dir', help='Output directory to write results', required=True)
