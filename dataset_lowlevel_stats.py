@@ -1,11 +1,13 @@
 import os
 import glob
 import json
+import csv
 from argparse import ArgumentParser
 from json_to_csv import parse_descriptors
 import itertools
 import seaborn
 import matplotlib.pyplot as plt
+import operator
 
 import numpy as np
 from scipy import stats
@@ -42,6 +44,7 @@ def process_all(input_dir, results_dir, include, ignore):
             data[feature].setdefault(category, [])
             data[feature][category].append(value)
 
+    ks = []
     for feature in data.keys():
         # Overall distribution plots
         try:
@@ -56,7 +59,6 @@ def process_all(input_dir, results_dir, include, ignore):
 
         # Pairwise distribution plots
         pairs = list(itertools.combinations(data[feature].keys(), 2))
-        ks = []
         for g1, g2 in pairs:
             try:
                 seaborn.distplot(data[feature][g1])
@@ -69,9 +71,18 @@ def process_all(input_dir, results_dir, include, ignore):
             # Kolmogorov-Smirnov test (KS_Statistic, twoTailed_pValue)
             st, p = stats.ks_2samp(np.array(data[feature][g1]), np.array(data[feature][g2]))
             ks.append([feature, g1, g2, st, p])
-        print ks
 
+    with open(os.path.join(results_dir, 'stats.csv'), 'wb') as csvfile:
+        writer = csv.writer(csvfile, delimiter='\t')
+        for row in ks:
+            writer.writerow(row)
 
+    ks_sorted = sorted(ks, key=operator.itemgetter(4))
+
+    with open(os.path.join(results_dir, 'stats_sorted.csv'), 'wb') as csvfile:
+        writer = csv.writer(csvfile, delimiter='\t')
+        for row in ks_sorted:
+            writer.writerow(row)
 
 
 if __name__ == '__main__':
