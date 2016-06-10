@@ -88,7 +88,7 @@ def process_all(input_dir, results_dir, include, ignore, only_interesting, overa
             plot_file = os.path.join(results_dir, feature + '-' + g1 + '-' + g2 + '.png')
             plt.savefig(plot_file)
             plt.clf()
-            html += '<div><p>%s | %s - %s (%.2f)</p><img src="%s"></div>' % (feature, g1, g2, p_value, plot_file)
+            html += '<div><p>%s | %s - %s (p=%.2f)</p><img src="%s"></div>' % (feature, g1, g2, p_value, plot_file)
         except:
             print "Error plotting", feature
 
