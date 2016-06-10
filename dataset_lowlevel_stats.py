@@ -104,7 +104,7 @@ Provides statistics for low-level features distribution per class in a dataset.
     parser.add_argument('-o', '--results_dir', help='Output directory to write results', required=True)
     parser.add_argument('--include', nargs='+', help='Descriptors to include (can use wildcards)', required=False)
     parser.add_argument('--ignore', nargs='+', help='Descriptors to ignore (can use wildcards)', required=False)
-    parser.add_argument('--only_interesting', help='Plot only interesting results', action='store_true')
+    parser.add_argument('--only-interesting', dest='only_interesting', help='Plot only interesting results', action='store_true')
     parser.add_argument('--plot-overall', dest = 'overall', help='Plot overall plot (all categories)', action='store_true')
 
     args = parser.parse_args()
