@@ -79,14 +79,20 @@ def process_all(input_dir, results_dir, include, ignore, only_interesting, overa
     if only_interesting:
         ks_sorted = [(feature, g1, g2, ks, p_value) for feature, g1, g2, ks, p_value in ks_sorted if p_value <= 0.05]
 
+    html = ''
     for feature, g1, g2, ks, p_value in ks_sorted:
         try:
             seaborn.distplot(data[feature][g1], axlabel=feature + ' (p=%.2f)' % p_value, kde_kws={"label": g1})
             seaborn.distplot(data[feature][g2], kde_kws={"label": g2})
-            plt.savefig(os.path.join(results_dir, feature + '-' + g1 + '-' + g2 + '.png'))
+            plot_file = os.path.join(results_dir, feature + '-' + g1 + '-' + g2 + '.png')
+            plt.savefig(plot_file)
             plt.clf()
+            html += '<div><p>%s | %s - %s (%.2f)</p><img src="%s"></div>' % (feature, g1, g2, p_value, plot_file)
         except:
             print "Error plotting", feature
+
+    with open(os.path.join(results_dir, 'stats_plots.html'), 'w') as f:
+        f.write(html)
 
 
 if __name__ == '__main__':
