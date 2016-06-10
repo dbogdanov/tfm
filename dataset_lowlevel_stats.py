@@ -78,6 +78,7 @@ def process_all(input_dir, results_dir, include, ignore, only_interesting, overa
 
     if only_interesting:
         ks_sorted = [(feature, g1, g2, ks, p_value) for feature, g1, g2, ks, p_value in ks_sorted if p_value <= 0.05]
+        ks_sorted = sorted(ks_sorted)
 
     html = ''
     for feature, g1, g2, ks, p_value in ks_sorted:
